@@ -1,0 +1,22 @@
+[package]
+name = "quench-cli"
+description = "Quench command-line interface"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[[bin]]
+name = "quench"
+path = "src/main.rs"
+
+[dependencies]
+quench-core = { workspace = true }
+quench-proto = { workspace = true }
+quench-backend = { workspace = true }
+anyhow = { workspace = true }
+clap = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+
+[lints]
+workspace = true

@@ -1,24 +1,24 @@
-# Adding a device driver to Thermite
+# Adding a device driver to Quench
 
 This guide is for anyone who wants their laptop supported — you do **not**
-need kernel-driver experience. A Thermite "driver" is ordinary Rust that
+need kernel-driver experience. A Quench "driver" is ordinary Rust that
 knows where *your* machine exposes fans and temperatures. If Linux already
 shows your fans somewhere in sysfs, you're probably 150 lines away from
 support.
 
-The one hard rule: **Thermite never writes to the Embedded Controller.**
+The one hard rule: **Quench never writes to the Embedded Controller.**
 If your machine only exposes fan control through raw EC registers (common on
-some HP/older models), Thermite will support monitoring + profiles, or
+some HP/older models), Quench will support monitoring + profiles, or
 nothing — not EC writes. That's deliberate; a wrong EC write can brick
 hardware or trip firmware failsafes that outlive the reboot.
 
 ## Step 0 — Probe your laptop (15 minutes, no risk)
 
 ```sh
-git clone https://github.com/Shanu-Kumawat/Thermite.git
-cd Thermite
+git clone https://github.com/Shanu-Kumawat/Quench.git
+cd Quench
 bash scripts/diagnose-driver.sh > my-laptop-probe.txt   # read-only probing
-thermite doctor                                         # if installed
+quench doctor                                         # if installed
 ```
 
 Then collect, and include in your issue/PR:
@@ -58,7 +58,7 @@ fan/pwm files, you're in the best case.
 
 ## Step 2 — Write the driver
 
-Everything lives in `crates/thermite-backend/src/drivers/`. Copy
+Everything lives in `crates/quench-backend/src/drivers/`. Copy
 `acer_wmi.rs` as a starting point — it's the reference implementation. What
 a driver must do:
 
@@ -112,7 +112,7 @@ Notes on the conventions:
 
 ## Step 3 — Register it
 
-One line in `crates/thermite-backend/src/drivers/mod.rs`:
+One line in `crates/quench-backend/src/drivers/mod.rs`:
 
 ```rust
 pub mod myvendor_wmi;
@@ -145,20 +145,20 @@ fn full_capability_detected() {
 
 ```sh
 export PATH=/usr/bin:$PATH
-cargo test -p thermite-backend
-sudo systemctl stop thermite
-sudo ./target/debug/thermite-daemon --dry-run   # full loop, no writes — watch the log
-thermite doctor                                  # driver should now match by name
+cargo test -p quench-backend
+sudo systemctl stop quench
+sudo ./target/debug/quench-daemon --dry-run   # full loop, no writes — watch the log
+quench doctor                                  # driver should now match by name
 # then live, with failsafes armed by default:
-sudo systemctl start thermite
-thermite fan list
-thermite fan set <name> manual 60   # and listen / watch RPM respond
-thermite fan set <name> auto        # ALWAYS return to auto when done testing
+sudo systemctl start quench
+quench fan list
+quench fan set <name> manual 60   # and listen / watch RPM respond
+quench fan set <name> auto        # ALWAYS return to auto when done testing
 ```
 
 ## Step 6 — Open the PR
 
-Include: probe output (`my-laptop-probe.txt`), `thermite doctor` output,
+Include: probe output (`my-laptop-probe.txt`), `quench doctor` output,
 what you tested live (manual duty? curves? profiles?), and
 `Tested-on: <DMI product name>` in the PR description. If you can't test
 everything, say so — an honest "monitoring only, verified" beats a
@@ -170,4 +170,4 @@ speculative "should work".
 - [ ] Unsupported operations return errors, not silent no-ops
 - [ ] Capability reporting is honest (don't claim Full without pwm writes verified)
 - [ ] Fixture-based tests cover read + write paths
-- [ ] `thermite fan set <name> auto` restores firmware control after tests
+- [ ] `quench fan set <name> auto` restores firmware control after tests

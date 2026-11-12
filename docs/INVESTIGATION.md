@@ -1,6 +1,6 @@
 # Investigation report (2026-10-24)
 
-The technical investigation that determined Thermite's architecture. Sources
+The technical investigation that determined Quench's architecture. Sources
 are URLs; claims without a URL were verified first-hand on the target machine
 (local probe, BIOS V1.60, kernel 7.2.11-arch1-1).
 
@@ -58,7 +58,7 @@ no forked kernel module.
   removal of battery may be needed."
   <https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/plain/drivers/acpi/ec_sys.c>
 
-**Decision**: Thermite never writes EC RAM; control goes exclusively through
+**Decision**: Quench never writes EC RAM; control goes exclusively through
 mainline `acer-wmi` interfaces.
 
 ## 3. Mainline kernel already won
@@ -104,7 +104,7 @@ the interface; a stopgap DKMS copy of the accepted patch covers 7.2 until
 
 ## 5. Risks register (what the design defends against)
 
-| Risk | Evidence | Thermite's answer |
+| Risk | Evidence | Quench's answer |
 |---|---|---|
 | Firmware reverts manual fan settings | DAMX #136 (10 s reverts, sibling model) | 2 s re-assert + readback-drift detection + alert |
 | Resume storms / EC reinit delay | DAMX #253 (12–15 s) | logind PrepareForSleep → auto before sleep, 20 s no-write grace, then re-apply |

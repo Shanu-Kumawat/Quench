@@ -1,7 +1,7 @@
-# Thermite
+# Quench
 
 <p align="center">
-  <img src="docs/img/dashboard.png" alt="Thermite dashboard" width="880">
+  <img src="docs/img/dashboard.png" alt="Quench dashboard" width="880">
 </p>
 
 **Thermal and fan management for Linux laptops** — a privileged daemon with
@@ -10,7 +10,7 @@ monitoring, and a GPUI desktop GUI + CLI. Built driver-first: each laptop
 family gets a small, honest driver, and the safety policy around it is
 hardware-agnostic.
 
-Thermite never writes to the Embedded Controller, hands control back to the
+Quench never writes to the Embedded Controller, hands control back to the
 firmware when temperatures cross critical limits, and survives firmware
 overrides, suspend/resume, and crashes by design — see
 [Safety](docs/SAFETY.md).
@@ -23,7 +23,7 @@ overrides, suspend/resume, and crashes by design — see
 
 ## Device support
 
-Thermite rides on the **mainline kernel `acer-wmi` driver**, so compatibility
+Quench rides on the **mainline kernel `acer-wmi` driver**, so compatibility
 follows the kernel's own quirk table — the full model-by-model list with
 support levels lives in [**COMPATIBILITY.md**](COMPATIBILITY.md). In short:
 
@@ -37,19 +37,19 @@ support levels lives in [**COMPATIBILITY.md**](COMPATIBILITY.md). In short:
 Getting a laptop supported is designed to be a small, testable contribution:
 read [`docs/DRIVERS.md`](docs/DRIVERS.md). "Full — expected" models need
 exactly one thing we can't do ourselves: someone running
-`thermite doctor` + the probe from the driver guide on real hardware and
+`quench doctor` + the probe from the driver guide on real hardware and
 reporting back.
 
 ## How it works
 
 ```
 crates/
-├── thermite-core     # pure policy: curves, hysteresis, failsafes, config
-├── thermite-proto    # versioned IPC over a Unix socket (CLI + GUI clients)
-├── thermite-backend  # device drivers (drivers/ registry) + hwmon + NVML
-├── thermite-daemon   # control loop, failsafes, IPC server (runs as root)
-├── thermite-cli      # `thermite` command-line client
-└── thermite-gui      # GPUI desktop client
+├── quench-core     # pure policy: curves, hysteresis, failsafes, config
+├── quench-proto    # versioned IPC over a Unix socket (CLI + GUI clients)
+├── quench-backend  # device drivers (drivers/ registry) + hwmon + NVML
+├── quench-daemon   # control loop, failsafes, IPC server (runs as root)
+├── quench-cli      # `quench` command-line client
+└── quench-gui      # GPUI desktop client
 ```
 
 - **Fan curves** — per-fan piecewise-linear temperature→duty curves with
@@ -76,11 +76,11 @@ crates/
 ### From source
 
 ```sh
-git clone https://github.com/Shanu-Kumawat/Thermite.git
-cd Thermite
-cargo build --release -p thermite-daemon -p thermite-cli -p thermite-gui
-sudo bash scripts/thermite-setup.sh   # service + group + config; idempotent
-# undo: sudo bash scripts/thermite-remove.sh   (--keep-app keeps the app)
+git clone https://github.com/Shanu-Kumawat/Quench.git
+cd Quench
+cargo build --release -p quench-daemon -p quench-cli -p quench-gui
+sudo bash scripts/quench-setup.sh   # service + group + config; idempotent
+# undo: sudo bash scripts/quench-remove.sh   (--keep-app keeps the app)
 ```
 
 The setup script also installs the stopgap DKMS module when your kernel
@@ -90,43 +90,43 @@ PKGBUILDs are in [`packaging/`](packaging/) (AUR packages planned).
 ### Check what your machine supports
 
 ```sh
-thermite doctor   # driver match, capability level, sensors, profiles — no root needed
+quench doctor   # driver match, capability level, sensors, profiles — no root needed
 ```
 
 ## Quick start
 
 ```sh
-thermite status                  # snapshot: temps, fans, failsafe phase
-thermite monitor                 # live view
-thermite fan list                # fans your driver reports
-thermite fan set cpu curve balanced
-thermite fan set cpu manual 55   # percent duty
-thermite fan set cpu auto        # back to firmware control
-thermite profile list
-thermite-gui                     # desktop app (join the `thermite` group first)
+quench status                  # snapshot: temps, fans, failsafe phase
+quench monitor                 # live view
+quench fan list                # fans your driver reports
+quench fan set cpu curve balanced
+quench fan set cpu manual 55   # percent duty
+quench fan set cpu auto        # back to firmware control
+quench profile list
+quench-gui                     # desktop app (join the `quench` group first)
 ```
 
-Configuration lives at `/etc/thermite/thermite.toml` (strictly validated; see
-[`examples/thermite.toml`](examples/thermite.toml)). Runtime changes made
+Configuration lives at `/etc/quench/quench.toml` (strictly validated; see
+[`examples/quench.toml`](examples/quench.toml)). Runtime changes made
 from the GUI/CLI persist across daemon restarts.
 
 ## FAQ
 
-**I want zero background activity — how do I turn Thermite off?**
+**I want zero background activity — how do I turn Quench off?**
 
 ```sh
-sudo systemctl stop thermite      # and: disable, to keep it off across reboots
+sudo systemctl stop quench      # and: disable, to keep it off across reboots
 ```
 
 On shutdown the daemon returns every fan to the firmware's automatic
 controller, so your laptop simply reverts to stock fan behavior — nothing is
 left stuck at the last commanded duty. Start it again with
-`sudo systemctl start thermite`.
+`sudo systemctl start quench`.
 
 ## Documentation
 
 - [`docs/SAFETY.md`](docs/SAFETY.md) — the failsafe design and the things
-  Thermite deliberately never does
+  Quench deliberately never does
 - [`docs/DRIVERS.md`](docs/DRIVERS.md) — adding support for a new laptop
 - [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) — crates, IPC, control loop
 - [`docs/HARDWARE.md`](docs/HARDWARE.md) — ANV15-51 findings: WMI vs EC,

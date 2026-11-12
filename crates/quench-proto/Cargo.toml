@@ -1,0 +1,18 @@
+[package]
+name = "quench-proto"
+description = "Quench IPC protocol: framed JSON messages over a Unix socket, plus the blocking client"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[dependencies]
+quench-core = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+thiserror = { workspace = true }
+
+[dev-dependencies]
+tempfile = "3"
+
+[lints]
+workspace = true

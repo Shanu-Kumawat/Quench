@@ -1,6 +1,6 @@
 # Safety design
 
-Thermite writes fan-control values to hardware. This document is the contract
+Quench writes fan-control values to hardware. This document is the contract
 for how it does so without endangering the machine, and what it refuses to do.
 
 ## Hard rules
@@ -8,7 +8,7 @@ for how it does so without endangering the machine, and what it refuses to do.
 1. **No EC RAM writes. Ever.** On the ANV15-51 the EC's fan-control path was
    moved behind WMI mailboxes; the classic AN515-era EC registers either do
    nothing or control something else entirely. Writing them is the main
-   firmware-bricking risk in this ecosystem. Thermite's only control surface
+   firmware-bricking risk in this ecosystem. Quench's only control surface
    is the mainline `acer-wmi` hwmon interface (`pwmX`, `pwmX_enable`) and
    `platform_profile`.
 2. **The firmware's own controller is the safety net.** `pwmX_enable = 2`
@@ -50,7 +50,7 @@ Normal ──warn──▶ ForceFull ──crit──▶ ReleasedAuto
 
 ## Watchdog & packaging
 
-`thermite.service` is `Type=notify` with `WatchdogSec=30`; the daemon pings
+`quench.service` is `Type=notify` with `WatchdogSec=30`; the daemon pings
 `WATCHDOG=1` every tick. If the loop hangs, systemd restarts it — and a
 restart begins by restoring auto before taking control again.
 `OOMScoreAdjust=-1000` keeps the OOM killer away from the failsafe path.
@@ -58,9 +58,9 @@ restart begins by restoring auto before taking control again.
 ## Testing
 
 The control loop is fully deterministic and testable with a scripted fake
-backend: every row in the table above has a test (`thermite-daemon` tests,
+backend: every row in the table above has a test (`quench-daemon` tests,
 `control.rs`). The curve engine, hysteresis, floors, and failsafe transitions
-have property/unit tests in `thermite-core`.
+have property/unit tests in `quench-core`.
 
 ## What is deliberately not implemented
 

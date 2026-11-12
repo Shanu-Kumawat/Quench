@@ -30,4 +30,4 @@ jobs:
       - name: Tests
         run: cargo test --workspace
       - name: Release build
-        run: cargo build --release -p thermite-daemon -p thermite-cli -p thermite-gui
+        run: cargo build --release -p quench-daemon -p quench-cli -p quench-gui

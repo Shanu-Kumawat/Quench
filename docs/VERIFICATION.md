@@ -2,13 +2,13 @@
 
 These experiments validate the architecture's hardware assumptions on the
 ANV15-51 before/while relying on them. They need root and change system state
-temporarily — each step restores the previous state. Run `thermite doctor`
+temporarily — each step restores the previous state. Run `quench doctor`
 afterwards to confirm.
 
 ## 1. Baseline
 
 ```sh
-thermite doctor                     # expect: capability none, sensors listed
+quench doctor                     # expect: capability none, sensors listed
 lsmod | grep acer_wmi               # loaded, default params
 cat /sys/module/acer_wmi/parameters/predator_v4   # N
 ```
@@ -21,7 +21,7 @@ module re-probes):
 ```sh
 sudo modprobe -r acer_wmi && sudo modprobe acer_wmi predator_v4=1
 sleep 2
-thermite doctor
+quench doctor
 ```
 
 **Expected:** capability `monitor-profiles`:
@@ -53,7 +53,7 @@ make                     # builds acer-wmi.ko against current headers
 sudo modprobe -r acer_wmi
 sudo insmod acer-wmi.ko  # or install via DKMS
 sleep 2
-thermite doctor          # expect: capability full (pwm1_enable present)
+quench doctor          # expect: capability full (pwm1_enable present)
 ```
 
 **Cautious functional check** (these write to hardware — respect the order,
@@ -78,32 +78,32 @@ echo 2 | sudo tee $H/pwm1_enable   # BACK TO AUTO — always end here
 
 **Restore:** `sudo rmmod acer_wmi && sudo modprobe acer_wmi` (stock params),
 or simply reboot. Uninstall the DKMS module once kernel ≥ 7.3 is running
-(`thermite doctor` will show `full` without it).
+(`quench doctor` will show `full` without it).
 
 ## 4. Daemon on-target checks
 
 ```sh
-sudo systemctl start thermite
-thermite status           # fans, modes, capability
-thermite fan cpu curve balanced
-thermite monitor          # watch a minute of ticks; Ctrl-C
-sudo systemctl stop thermite
+sudo systemctl start quench
+quench status           # fans, modes, capability
+quench fan cpu curve balanced
+quench monitor          # watch a minute of ticks; Ctrl-C
+sudo systemctl stop quench
 cat /sys/.../pwm1_enable  # back to 2 (auto) after stop
 sudo systemctl suspend    # resume, then:
-journalctl -u thermite -b --since "10 min ago"   # grace re-apply messages
+journalctl -u quench -b --since "10 min ago"   # grace re-apply messages
 ```
 
 ## 5. Findings (2026-10-24, after the first successful on-target run)
 
 | Assumption | Status | Source |
 |---|---|---|
-| EC writes useless for fan control on ANV15-51 | community evidence; Thermite never writes EC | docs/INVESTIGATION.md |
+| EC writes useless for fan control on ANV15-51 | community evidence; Quench never writes EC | docs/INVESTIGATION.md |
 | `predator_v4=1` → hwmon + profiles, no pwm | **verified on this machine** (diagnose-driver.sh §3) | HARDWARE.md |
 | ANV15-51 quirk = full control incl. independent dual fans | **verified on this machine** (BIOS V1.60): fan1/fan2 RPM + pwm1/2 + temp1-3 + 5 profiles | INVESTIGATION.md |
 | turbo profile absent | **verified**: choices list has no turbo | this run |
-| hwmon registers as `acer`, not `acer_wmi` | **verified** (fixed in Thermite's probe) | this run |
+| hwmon registers as `acer`, not `acer_wmi` | **verified** (fixed in Quench's probe) | this run |
 | first driver swap after dkms install can silently no-op | **observed once**; setup script now retries the swap | this run |
 
-Full green run: `thermite-setup.sh` completed with `thermite doctor` →
+Full green run: `quench-setup.sh` completed with `quench doctor` →
 "everything wired for full fan control", daemon live (capability Full),
 fans 2675/2461 RPM idle.

@@ -53,7 +53,7 @@ Profile behavior: low-power/quiet/balanced/balanced-performance work;
 
 EC RAM (MMIO-mapped `ERAM` @ `0xFE708500`): `0x58` CTMP (CPU temp), `0x59`
 GTMP (GPU temp), `0x5C` CPUF (CPU fan RPM, 16-bit), `0x6A` GPUF (GPU fan RPM,
-16-bit). Thermite reads the same values through the WMI hwmon instead; ec_sys
+16-bit). Quench reads the same values through the WMI hwmon instead; ec_sys
 stays optional.
 
 ## Other hardware specifics

@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Name=Quench
+GenericName=Fan & Thermal Control
+Comment=Fan curves, thermal monitoring and profiles for your laptop
+Exec=quench-gui
+Icon=quench
+Terminal=false
+Categories=System;Monitor;
+Keywords=fan;thermal;temperature;cooling;laptop;
+StartupWMClass=quench-gui

@@ -1,0 +1,19 @@
+[package]
+name = "quench-gui"
+description = "Quench desktop GUI (GPUI)"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[[bin]]
+name = "quench-gui"
+path = "src/main.rs"
+
+[dependencies]
+quench-core = { workspace = true }
+quench-proto = { workspace = true }
+anyhow = { workspace = true }
+gpui-kit = "0.7"
+
+[lints]
+workspace = true

@@ -1,2 +1,14 @@
 /target
 *.log
+
+# ZCode working files
+.zcode/
+
+# kernel-module build artifacts
+driver/acer-wmi-anv15/*.cmd
+driver/acer-wmi-anv15/*.o
+driver/acer-wmi-anv15/*.ko
+driver/acer-wmi-anv15/*.mod
+driver/acer-wmi-anv15/*.mod.c
+driver/acer-wmi-anv15/Module.symvers
+driver/acer-wmi-anv15/modules.order

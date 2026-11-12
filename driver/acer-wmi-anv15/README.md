@@ -13,7 +13,7 @@ this directory.
 The mainline `acer-wmi` driver with the **Acer Nitro ANV15-51 quirk** that
 was accepted upstream on 2026-10-05 (Justin Vargas, pdx86 tree) and will
 ship in kernel 7.3. On kernel 7.2 that quirk is missing, so the machine has
-no fan-control interface. This module carries the upstream code so Thermite
+no fan-control interface. This module carries the upstream code so Quench
 (and any hwmon client, e.g. CoolerControl) can use it today.
 
 Provenance: `drivers/platform/x86/acer-wmi.c` from the pdx86 `for-next` tree
@@ -31,7 +31,7 @@ With this module loaded, the machine gains:
   (low-power/quiet/balanced/balanced-performance; turbo is rejected by
   firmware — known)
 
-Verify with `thermite doctor` → capability should read **full**.
+Verify with `quench doctor` → capability should read **full**.
 
 ## Build & install (manual)
 
@@ -39,7 +39,7 @@ Verify with `thermite doctor` → capability should read **full**.
 make                                    # needs linux-headers for your kernel
 sudo modprobe -r acer_wmi
 sudo insmod acer-wmi.ko
-thermite doctor
+quench doctor
 ```
 
 ## Install (DKMS, rebuilds per kernel)
@@ -60,7 +60,7 @@ sudo rm -rf /usr/src/acer-wmi-anv15-7.2.stopgap.1
 sudo modprobe -r acer_wmi && sudo modprobe acer_wmi   # back to in-tree
 ```
 
-`thermite doctor` showing `full` on kernel ≥ 7.3 without this module means
+`quench doctor` showing `full` on kernel ≥ 7.3 without this module means
 it is obsolete — remove it. Keeping it installed past 7.3 would shadow the
 in-tree driver with stale code.
 
@@ -70,7 +70,7 @@ in-tree driver with stale code.
   name). `modprobe -r acer_wmi` first; some setups unload it automatically
   via the usual module dependency rules.
 - Secure Boot: the module must be MOK-enrolled or Secure Boot disabled.
-- It exposes the same sysfs as the future in-tree version; Thermite needs no
+- It exposes the same sysfs as the future in-tree version; Quench needs no
   configuration either way (capability probing handles both).
 - Functional check after loading (return to auto when done!):
 

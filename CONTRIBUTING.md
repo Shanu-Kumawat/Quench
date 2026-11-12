@@ -1,4 +1,4 @@
-# Contributing to Thermite
+# Contributing to Quench
 
 Thanks for helping! Three kinds of contributions matter most right now:
 
@@ -14,8 +14,8 @@ Thanks for helping! Three kinds of contributions matter most right now:
 ## Building and testing
 
 ```sh
-git clone https://github.com/Shanu-Kumawat/Thermite.git
-cd Thermite
+git clone https://github.com/Shanu-Kumawat/Quench.git
+cd Quench
 cargo test --workspace          # 64 tests, none need hardware
 cargo clippy --workspace --all-targets -- -D warnings
 cargo fmt --all

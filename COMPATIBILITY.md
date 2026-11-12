@@ -1,9 +1,9 @@
 # Device compatibility
 
-Thermite's fan control is not model-by-model reverse engineering: it rides
+Quench's fan control is not model-by-model reverse engineering: it rides
 on the **mainline kernel `acer-wmi` driver** (and, on old kernels, the
 [stopgap DKMS module](driver/acer-wmi-anv15/), which is a patched copy of
-that same driver). A laptop is therefore compatible with Thermite to exactly
+that same driver). A laptop is therefore compatible with Quench to exactly
 the degree the kernel supports it. This page lists every model the kernel
 driver's quirk table knows (as of the pdx86 for-next tree, October 2026 /
 kernel 7.3), what level of support that translates to, and what is
@@ -11,7 +11,7 @@ hardware-tested.
 
 ## Support levels
 
-These mirror what `thermite doctor` reports:
+These mirror what `quench doctor` reports:
 
 | Level | Meaning |
 |---|---|
@@ -34,22 +34,22 @@ These mirror what `thermite doctor` reports:
 | Predator (PH16-71) | Monitor + profiles | no pwm in the kernel driver yet |
 | Predator (PH18-71) | Monitor + profiles | no pwm in the kernel driver yet |
 | Aspire (A315-58G) | Monitor only | temperatures only |
-| Predator Helios 300 (PH315-53) | None (for Thermite) | pre-hwmon fan interface — the kernel driver cannot expose it through hwmon |
+| Predator Helios 300 (PH315-53) | None (for Quench) | pre-hwmon fan interface — the kernel driver cannot expose it through hwmon |
 
 Notes:
 
 - **"Full — expected"** means every ingredient is in place (kernel quirk
-  exposes `fanX`/`pwmX`/`tempX` + platform profiles, and Thermite's acer
+  exposes `fanX`/`pwmX`/`tempX` + platform profiles, and Quench's acer
   driver reads exactly those). The only missing ingredient is a human
-  running it on real hardware. If that's you: `thermite doctor`, then the
+  running it on real hardware. If that's you: `quench doctor`, then the
   probe in [`DRIVERS.md`](DRIVERS.md), then a
-  [device-support issue](https://github.com/Shanu-Kumawat/Thermite/issues/new?template=device-support.md).
+  [device-support issue](https://github.com/Shanu-Kumawat/Quench/issues/new?template=device-support.md).
 - On kernel **7.2** (and other pre-7.3 kernels), ANV15-51 needs the
   stopgap DKMS module; models already quirked in your running kernel work
   without it.
 - Models **not listed** here may still expose monitoring + profiles via
   `modprobe acer_wmi predator_v4=1` (any laptop whose firmware speaks the
-  v4 gaming WMI interface). Run `thermite doctor` to find out.
+  v4 gaming WMI interface). Run `quench doctor` to find out.
 
 ## Other vendors
 

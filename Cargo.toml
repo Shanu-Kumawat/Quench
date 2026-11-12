@@ -1,24 +1,24 @@
 [workspace]
 resolver = "2"
 members = [
-    "crates/thermite-core",
-    "crates/thermite-proto",
-    "crates/thermite-backend",
-    "crates/thermite-daemon",
-    "crates/thermite-cli",
-    "crates/thermite-gui",
+    "crates/quench-core",
+    "crates/quench-proto",
+    "crates/quench-backend",
+    "crates/quench-daemon",
+    "crates/quench-cli",
+    "crates/quench-gui",
 ]
 
 [workspace.package]
 version = "0.1.0"
 edition = "2024"
 license = "MIT"
-repository = "https://github.com/Shanu-Kumawat/Thermite"
+repository = "https://github.com/Shanu-Kumawat/Quench"
 
 [workspace.dependencies]
-thermite-core = { path = "crates/thermite-core" }
-thermite-proto = { path = "crates/thermite-proto" }
-thermite-backend = { path = "crates/thermite-backend" }
+quench-core = { path = "crates/quench-core" }
+quench-proto = { path = "crates/quench-proto" }
+quench-backend = { path = "crates/quench-backend" }
 
 serde = { version = "1", features = ["derive", "rc"] }
 serde_json = "1"
