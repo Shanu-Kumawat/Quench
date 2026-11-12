@@ -11,11 +11,11 @@ use std::fs;
 use std::path::{Path, PathBuf};
 use std::time::Instant;
 
-use serde::{Deserialize, Serialize};
 use quench_core::FailsafePhase;
 use quench_core::config::{Config, FanConfig};
 use quench_core::sensors::{CapabilityReport, FanDescriptor, FanId, Telemetry};
 use quench_proto::{Alert, ControlSnapshot, FanRuntimeState};
+use serde::{Deserialize, Serialize};
 
 /// Mutable per-fan runtime state (desired config + last observed effects).
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, Default)]

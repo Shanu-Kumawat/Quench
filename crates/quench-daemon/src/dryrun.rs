@@ -6,9 +6,7 @@
 use std::collections::BTreeMap;
 
 use quench_core::BackendError;
-use quench_core::sensors::{
-    Backend, CapabilityReport, FanDescriptor, FanId, HwFanMode, Telemetry,
-};
+use quench_core::sensors::{Backend, CapabilityReport, FanDescriptor, FanId, HwFanMode, Telemetry};
 
 /// Wraps a backend and suppresses its writes.
 pub struct DryRunBackend {

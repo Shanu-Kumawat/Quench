@@ -116,14 +116,11 @@ enum ConfigAction {
 }
 
 fn connect(socket: &Path) -> Result<Client> {
-    Client::connect(
-        socket,
-        &format!("quench-cli {}", env!("CARGO_PKG_VERSION")),
-    )
-    .with_context(|| format!("connecting to daemon at {}", socket.display()))
-    .inspect_err(|_| {
-        eprintln!("hint: is quench-daemon running? Try `systemctl status quench`.");
-    })
+    Client::connect(socket, &format!("quench-cli {}", env!("CARGO_PKG_VERSION")))
+        .with_context(|| format!("connecting to daemon at {}", socket.display()))
+        .inspect_err(|_| {
+            eprintln!("hint: is quench-daemon running? Try `systemctl status quench`.");
+        })
 }
 
 fn main() -> Result<()> {
@@ -180,8 +177,7 @@ fn print_status(s: &StatusSnapshot) {
         "failsafe    {}{}",
         match s.control.failsafe_phase {
             quench_core::FailsafePhase::Normal => "normal".to_string(),
-            quench_core::FailsafePhase::ForceFull =>
-                "FORCE FULL DUTY (warn threshold)".to_string(),
+            quench_core::FailsafePhase::ForceFull => "FORCE FULL DUTY (warn threshold)".to_string(),
             quench_core::FailsafePhase::ReleasedAuto =>
                 "RELEASED TO FIRMWARE (crit threshold)".to_string(),
         },

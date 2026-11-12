@@ -17,10 +17,10 @@ use std::io::{BufReader, Read, Write};
 use std::os::unix::net::UnixStream;
 use std::path::Path;
 
-use serde::{Deserialize, Serialize};
 use quench_core::{
     CapabilityReport, Config, CurvePoint, FailsafePhase, FanConfig, FanDescriptor, FanId, Telemetry,
 };
+use serde::{Deserialize, Serialize};
 use thiserror::Error;
 
 /// Protocol version; bump on any incompatible wire change.

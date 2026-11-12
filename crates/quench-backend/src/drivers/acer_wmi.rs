@@ -241,9 +241,10 @@ impl Backend for AcerWmiBackend {
                 // matters there, so pwm_enable alone is refreshed and on
                 // a 5x longer clock (AUTO_READBACK_TTL).
                 let key = fan.id.to_string();
-                let auto_watch = self.readback.get(&key).is_some_and(|r| {
-                    r.duty_pct.is_none() && r.hw_mode == Some(HwFanMode::Auto)
-                });
+                let auto_watch = self
+                    .readback
+                    .get(&key)
+                    .is_some_and(|r| r.duty_pct.is_none() && r.hw_mode == Some(HwFanMode::Auto));
                 let ttl = if auto_watch {
                     self.auto_readback_ttl
                 } else {
@@ -258,16 +259,17 @@ impl Backend for AcerWmiBackend {
                     Some(r) => (r.duty_pct, r.hw_mode),
                     None if !self.readback.contains_key(&key) => (None, None),
                     None => {
-                        let hw_mode = crate::sysfs::parse_num::<u8>(
-                            &hwmon.join(format!("pwm{n}_enable")),
-                        )
-                        .and_then(hw_mode_from_enable);
+                        let hw_mode =
+                            crate::sysfs::parse_num::<u8>(&hwmon.join(format!("pwm{n}_enable")))
+                                .and_then(hw_mode_from_enable);
                         let duty_pct = if auto_watch {
                             None
                         } else {
                             crate::sysfs::parse_num::<u32>(&hwmon.join(format!("pwm{n}")))
                                 .or_else(|| {
-                                    crate::sysfs::parse_num::<u32>(&hwmon.join(format!("pwm{n}_input")))
+                                    crate::sysfs::parse_num::<u32>(
+                                        &hwmon.join(format!("pwm{n}_input")),
+                                    )
                                 })
                                 .map(pwm_to_pct)
                         };

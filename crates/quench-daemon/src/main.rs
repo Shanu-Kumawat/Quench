@@ -7,8 +7,6 @@ use std::sync::{Arc, Mutex};
 
 use anyhow::{Context, Result};
 use clap::Parser;
-use signal_hook::consts::{SIGHUP, SIGINT, SIGTERM};
-use signal_hook::iterator::Signals;
 use quench_backend::QuenchBackend;
 use quench_core::config::Config;
 use quench_core::sensors::Backend;
@@ -20,6 +18,8 @@ use quench_daemon::state::{
 };
 use quench_daemon::suspend::{SuspendEvent, spawn_watcher};
 use quench_proto::DEFAULT_SOCKET_PATH;
+use signal_hook::consts::{SIGHUP, SIGINT, SIGTERM};
+use signal_hook::iterator::Signals;
 use tracing::{error, info, warn};
 
 #[derive(Debug, Parser)]

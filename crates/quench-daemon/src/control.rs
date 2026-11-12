@@ -729,11 +729,11 @@ impl ControlLoop {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use std::path::PathBuf;
-    use std::sync::atomic::AtomicBool;
     use quench_backend::{FakeBackend, WriteOp};
     use quench_core::config::{FanConfig, FanModeKind};
     use quench_core::curve::{CurveDef, CurvePoint};
+    use std::path::PathBuf;
+    use std::sync::atomic::AtomicBool;
 
     /// FakeBackend behind Arc<Mutex<>> with settable temperatures, so tests
     /// can drive the loop tick by tick while it lives inside `Box<dyn
@@ -776,9 +776,7 @@ mod tests {
         fn capability(&self) -> quench_core::CapabilityReport {
             self.fake.lock().map(|f| f.capability()).unwrap_or_default()
         }
-        fn read_telemetry(
-            &mut self,
-        ) -> Result<quench_core::Telemetry, quench_core::BackendError> {
+        fn read_telemetry(&mut self) -> Result<quench_core::Telemetry, quench_core::BackendError> {
             let cpu = self.cpu.lock().map(|t| *t).unwrap_or(0.0);
             let gpu = self.gpu.lock().map(|t| *t).unwrap_or(0.0);
             let mut fake = self
@@ -798,20 +796,13 @@ mod tests {
                 .map_err(|_| quench_core::BackendError::Invalid("poisoned".into()))?
                 .set_fan_hw_mode(fan, mode)
         }
-        fn set_fan_duty(
-            &mut self,
-            fan: &FanId,
-            duty: u8,
-        ) -> Result<(), quench_core::BackendError> {
+        fn set_fan_duty(&mut self, fan: &FanId, duty: u8) -> Result<(), quench_core::BackendError> {
             self.fake
                 .lock()
                 .map_err(|_| quench_core::BackendError::Invalid("poisoned".into()))?
                 .set_fan_duty(fan, duty)
         }
-        fn set_platform_profile(
-            &mut self,
-            profile: &str,
-        ) -> Result<(), quench_core::BackendError> {
+        fn set_platform_profile(&mut self, profile: &str) -> Result<(), quench_core::BackendError> {
             self.fake
                 .lock()
                 .map_err(|_| quench_core::BackendError::Invalid("poisoned".into()))?
