@@ -45,7 +45,7 @@ mode = "auto"       # "auto" | "manual" | "curve"
 mode = "auto"
 
 [platform]
-# Profile Quench keeps applied (one of the firmware's choices — see
+# Profile Quench keeps applied (one of the firmware's choices, see
 # `quench profile list`), or "none" to never touch platform profiles.
 #
 # Default is "none" (hands-off): power-profiles-daemon or another tool
@@ -54,7 +54,7 @@ mode = "auto"
 # fan control. GUI/CLI profile switching is disabled in this mode.
 #
 # Set an explicit profile name to make Quench apply and hold it across
-# boots and suspend/resume — worth it when your firmware offers a profile
+# boots and suspend/resume, worth it when your firmware offers a profile
 # that PPD cannot reach (e.g. Acer's balanced-performance), or when no
 # other tool manages profiles.
 active = "none"

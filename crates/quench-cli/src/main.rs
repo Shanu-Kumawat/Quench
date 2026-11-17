@@ -1,4 +1,4 @@
-//! # quench — command-line interface
+//! # quench: command-line interface
 //!
 //! Talks to the daemon over its Unix socket; `doctor` probes hardware
 //! directly and works without the daemon.
@@ -70,7 +70,7 @@ enum FanSpec {
     List,
     /// Apply an action to one fan by name (e.g. cpu, gpu)
     Set {
-        /// Fan name — see `quench fan list`
+        /// Fan name, see `quench fan list`
         name: String,
         #[command(subcommand)]
         action: FanAction,

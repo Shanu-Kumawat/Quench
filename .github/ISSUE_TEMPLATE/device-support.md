@@ -10,7 +10,7 @@ labels: device-support
 **Kernel:** (`uname -r`)
 **Distro:**
 
-**Probe output** — run the collection from
+**Probe output**: run the collection from
 [docs/DRIVERS.md](../docs/DRIVERS.md) step 0 and paste it here (DMI names,
 `/sys/class/hwmon/*` listing, fan/pwm files found, platform_profile
 choices).

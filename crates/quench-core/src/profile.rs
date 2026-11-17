@@ -4,7 +4,7 @@
 //! (e.g. `/sys/firmware/acpi/platform_profile` choices). Config accepts any
 //! name; the daemon validates against the driver-reported available list at
 //! runtime. [`PlatformProfile::KNOWN`] lists the common Linux
-//! platform-profile names — on the Acer ANV15-51 (BIOS V1.60) turbo is
+//! platform-profile names. On the Acer ANV15-51 (BIOS V1.60) turbo is
 //! rejected with an I/O error, so clients must treat the *available* list
 //! reported by the daemon as authoritative, not this list.
 

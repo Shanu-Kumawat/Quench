@@ -8,12 +8,12 @@
 //!   handed back to auto is drift-corrected instead of timer re-asserted
 //!   (writing "auto" to an auto fan is pure WMI cost), and fans never
 //!   commanded are left entirely to the firmware (WMI round-trips are
-//!   audible system-wide — BT audio jitter — so hands-off means no WMI
+//!   audible system-wide (BT audio jitter), so hands-off means no WMI
 //!   traffic at all);
 //! - thermal failsafe: warn → full duty, crit → hand control back to the
 //!   firmware (`pwm_enable = auto`) with a recovery latch;
 //! - suspend safety: fans to auto before sleep, no writes for a grace
-//!   period after resume (the EC needs ~12-15s to reinitialize — see
+//!   period after resume (the EC needs ~12-15s to reinitialize, see
 //!   Div-Acer-Manager-Max issue #253);
 //! - graceful shutdown: fans restored to auto.
 
@@ -70,7 +70,7 @@ pub struct ControlLoop {
     failsafe: FailsafeEngine,
     hysteresis: BTreeMap<String, Hysteresis>,
     last_written: BTreeMap<String, LastWrite>,
-    /// Per-fan (mode, curve, config generation) — when it changes, the
+    /// Per-fan (mode, curve, config generation): when it changes, the
     /// fan's hysteresis is stale (built against the old policy) and gets
     /// reset so edits apply immediately instead of being gated by old
     /// upshift points.
@@ -421,7 +421,7 @@ impl ControlLoop {
             let driving_temp = telemetry.temp_for(&fan.temp_source).unwrap_or(0.0);
 
             // A changed mode/curve/config means the hysteresis state (and
-            // possibly the last write) reflect the OLD policy — reset both
+            // possibly the last write) reflect the OLD policy, so reset both
             // so the new duty applies on this very tick.
             {
                 let sig = (
@@ -597,7 +597,7 @@ impl ControlLoop {
         let needs_write = match last {
             // Never commanded this fan: unknown hw_mode means firmware-owned
             // (the acer backend skips pwm readbacks for fans we have not
-            // written). Assume auto rather than issuing a surprise write —
+            // written). Assume auto rather than issuing a surprise write;
             // every explicit hand-back (mode switch, failsafe release,
             // suspend, shutdown) has `last` set and still writes.
             None => hw_mode.is_some_and(|m| m != HwFanMode::Auto),
@@ -1254,7 +1254,7 @@ mod tests {
     fn curve_edit_applies_immediately_even_downward() {
         // Regression: hysteresis used to survive curve edits, so lowering
         // a curve kept the old (higher) duty until temperature fell past
-        // the stale upshift gate — "curves sometimes don't apply".
+        // the stale upshift gate, hence "curves sometimes don't apply".
         let (mut control, shared, _subs, fake, _cpu_t, _gpu_t) = setup();
         set_fan_mode(&shared, "cpu", curve_mode("balanced"));
         let t = Instant::now();
@@ -1271,7 +1271,7 @@ mod tests {
             .max()
             .unwrap_or(0);
 
-        // Now the GUI edits the curve down (flat 30%) — this is what
+        // Now the GUI edits the curve down (flat 30%), which is what
         // PutCurve does to shared state, including the gen bump.
         {
             let mut g = shared.lock().unwrap();
@@ -1335,7 +1335,7 @@ mod tests {
     #[test]
     fn touched_auto_fan_is_not_reasserted_on_timer() {
         // Regression: after handing a fan back to auto, the old loop
-        // re-wrote pwm_enable=Auto every reassert_interval — a pure WMI
+        // re-wrote pwm_enable=Auto every reassert_interval, a pure WMI
         // cost (audible system-wide). Hand-back must be drift-driven.
         let (mut control, shared, _subs, fake, _cpu_t, _gpu_t) = setup();
         set_fan_mode(&shared, "cpu", curve_mode("balanced"));

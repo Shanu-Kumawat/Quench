@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# quench-remove.sh — undo everything quench-setup.sh did.
+# quench-remove.sh: undo everything quench-setup.sh did.
 #
 #   sudo bash scripts/quench-remove.sh              # remove driver + app
 #   sudo bash scripts/quench-remove.sh --keep-app   # remove driver only

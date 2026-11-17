@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# quench-setup.sh — one-shot installer for Quench on the Acer Nitro V 15
+# quench-setup.sh: one-shot installer for Quench on the Acer Nitro V 15
 # (ANV15-51), kernel 7.2.
 #
 # What it does:
@@ -50,20 +50,20 @@ info "kernel headers: ok"
 
 if command -v mokutil >/dev/null; then
     if mokutil --sb-state 2>/dev/null | grep -qi enabled; then
-        warn "Secure Boot is ON — the driver module is unsigned and will likely be refused."
+        warn "Secure Boot is ON, the driver module is unsigned and will likely be refused."
         warn "Disable Secure Boot in the BIOS, or enroll a MOK key, then re-run this script."
         die "cannot continue with Secure Boot enforcing unsigned modules"
     fi
     info "secure boot: off"
 else
-    info "mokutil not found — skipping Secure Boot check (fine if it's disabled in BIOS)"
+    info "mokutil not found, skipping Secure Boot check (fine if it's disabled in BIOS)"
 fi
 
 # ---------------------------------------------------------------- 2. driver
 step "2/6  Installing the stopgap acer-wmi driver (DKMS)"
 
 if dkms status -m "$DKMS_NAME" -v "$DKMS_VER" 2>/dev/null | grep -q ': installed'; then
-    info "already installed for this kernel — skipping build"
+    info "already installed for this kernel, skipping build"
 else
     [[ -d "/usr/src/${DKMS_NAME}-${DKMS_VER}" ]] || true
     rm -rf "/usr/src/${DKMS_NAME}-${DKMS_VER}"
@@ -98,7 +98,7 @@ for attempt in 1 2 3; do
     sleep 2
     ACER_HWMON="$(find_acer_hwmon)"
     [[ -n $ACER_HWMON ]] && break
-    warn "hwmon did not appear after swap attempt $attempt — retrying"
+    warn "hwmon did not appear after swap attempt $attempt, retrying"
 done
 [[ -n $ACER_HWMON ]] || die "acer_wmi loaded but no hwmon appeared.
 Check: dmesg | grep -i acer_wmi (last 30 lines)"
@@ -108,7 +108,7 @@ info "fan RPMs: $(cat "$ACER_HWMON"/fan*_input 2>/dev/null | tr '\n' ' ')"
 if [[ -e $ACER_HWMON/pwm1_enable ]]; then
     info "manual fan control (pwm): available"
 else
-    warn "pwm control NOT exposed — Quench will run in monitor+profiles mode only."
+    warn "pwm control NOT exposed, Quench will run in monitor+profiles mode only."
     warn "Check 'dmesg | grep -i acer_wmi' and whether the machine actually matched the quirk."
 fi
 
@@ -129,7 +129,7 @@ systemd-tmpfiles --create /usr/lib/tmpfiles.d/quench.conf
 info "binaries, service, users and runtime dirs installed"
 
 if [[ -f /etc/quench/quench.toml ]]; then
-    info "config already exists at /etc/quench/quench.toml — leaving it alone"
+    info "config already exists at /etc/quench/quench.toml, leaving it alone"
 else
     install -Dm600 "$REPO_ROOT/examples/quench.toml" /etc/quench/quench.toml
     info "installed example config to /etc/quench/quench.toml (safe defaults)"
@@ -146,7 +146,7 @@ if [[ -n $INVOKING_USER && $INVOKING_USER != root ]]; then
         info "added $INVOKING_USER to the quench group (takes effect at next login)"
     fi
 else
-    warn "could not determine invoking user — add yourself later with: sudo usermod -aG quench \$USER"
+    warn "could not determine invoking user, add yourself later with: sudo usermod -aG quench \$USER"
 fi
 
 # ---------------------------------------------------------------- 5. service
@@ -167,7 +167,7 @@ echo
 if quench doctor 2>/dev/null | grep -q 'full fan control'; then
     printf '\033[1;32m    All good: full fan control is live.\033[0m\n'
 else
-    warn "capability did not read 'full fan control' — see the doctor output above."
+    warn "capability did not read 'full fan control', see the doctor output above."
 fi
 
 cat <<EOF

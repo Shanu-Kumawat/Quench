@@ -3,7 +3,7 @@
 //! Channel map (mainline driver, verified against the ANV15-51 quirk patch):
 //! `fan1`/`pwm1` = CPU fan, `fan2`/`pwm2` = GPU fan; `temp1` = CPU,
 //! `temp2` = GPU, `temp3` = external. `pwmX_enable`: 0 = turbo,
-//! 1 = custom, 2 = auto — note the inverted convention relative to usual
+//! 1 = custom, 2 = auto. Note the inverted convention relative to usual
 //! hwmon; the translation from [`HwFanMode`] lives here, in the driver.
 
 use std::collections::BTreeMap;
@@ -39,7 +39,7 @@ pub fn find_acer_hwmon(root: &Path) -> Option<PathBuf> {
 /// (WMI/EC-backed, ~5 ms per access) sysfs attribute. These round-trips
 /// stall CPUs hard enough to be audible system-wide (Bluetooth audio
 /// jitter), so they are made only for fans quench has commanded this
-/// session — readbacks for untouched fans are never read at all (reported
+/// session; readbacks for untouched fans are never read at all (reported
 /// as `None`; the firmware owns those fans). RPM and temperatures are
 /// kernel-cached (~0.1 ms) and always read live. Our own writes update the
 /// cache immediately, so drift detection still sees a coherent world; an
@@ -47,13 +47,13 @@ pub fn find_acer_hwmon(root: &Path) -> Option<PathBuf> {
 pub const READBACK_TTL: Duration = Duration::from_secs(2);
 
 /// Refresh clock for a commanded fan that sits in firmware-auto: only the
-/// mode is watched (takeover detection — duty is the firmware's business),
+/// mode is watched (takeover detection; duty is the firmware's business),
 /// so only `pwmN_enable` is re-read, and less often. Every refresh is an
 /// audible WMI burst, and an external takeover is not time-critical.
 pub const AUTO_READBACK_TTL: Duration = Duration::from_secs(10);
 
 /// How long the `platform_profile` readback is trusted. Reading it is a
-/// WMI/ACPI round-trip (~5 ms) and it only changes when someone sets it —
+/// WMI/ACPI round-trip (~5 ms) and it only changes when someone sets it,
 /// so it is cached for a minute and updated on our own writes.
 pub const PROFILE_TTL: Duration = Duration::from_secs(60);
 
@@ -121,7 +121,7 @@ impl AcerWmiBackend {
         self.hwmon.as_ref().map(|h| h.join(format!("{attr}{n}")))
     }
 
-    /// pwm value file — `pwmN` in the mainline driver; some kernels use
+    /// pwm value file: `pwmN` in the mainline driver; some kernels use
     /// `pwmN_input` for readback, so read paths try both.
     fn pwm_value(&self, fan: &FanId) -> Option<PathBuf> {
         self.attr_file(fan, "pwm")

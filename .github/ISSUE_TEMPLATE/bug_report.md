@@ -18,7 +18,7 @@ labels: bug
 journalctl -u quench -b --no-pager | tail -50
 ```
 
-**Config** (`/etc/quench/quench.toml`, if relevant — no secrets there,
+**Config** (`/etc/quench/quench.toml`, if relevant; no secrets there,
 but feel free to trim):
 
 **Failsafe involved?** If fans went to 100% or control returned to

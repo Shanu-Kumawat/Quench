@@ -20,7 +20,7 @@ Provenance: `drivers/platform/x86/acer-wmi.c` from the pdx86 `for-next` tree
 as of 2026-10-24 (includes the ANV15-51 quirk plus the follow-up fixes that
 tree carries: quirk-field refactor, turbo-key handling on models without a
 turbo button, AMW0 error handling, Aspire A315-58G / Nitro AN16-41 quirks).
-License GPL-2.0-or-later, copyright the kernel authors — unchanged except
+License GPL-2.0-or-later, copyright the kernel authors, unchanged except
 for this build harness.
 
 With this module loaded, the machine gains:
@@ -29,7 +29,7 @@ With this module loaded, the machine gains:
   (CPU/GPU RPM), `pwm1-2` + `pwm1-2_enable` (0=turbo, 1=custom, 2=auto)
 - `/sys/firmware/acpi/platform_profile[_choices]`
   (low-power/quiet/balanced/balanced-performance; turbo is rejected by
-  firmware — known)
+  firmware, known)
 
 Verify with `quench doctor` → capability should read **full**.
 
@@ -61,7 +61,7 @@ sudo modprobe -r acer_wmi && sudo modprobe acer_wmi   # back to in-tree
 ```
 
 `quench doctor` showing `full` on kernel ≥ 7.3 without this module means
-it is obsolete — remove it. Keeping it installed past 7.3 would shadow the
+it is obsolete and should be removed. Keeping it installed past 7.3 would shadow the
 in-tree driver with stale code.
 
 ## Notes & caveats

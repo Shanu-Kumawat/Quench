@@ -7,7 +7,7 @@
 //!    `t_up - drop_c` or below. The gate tracks the most recent upshift.
 //! 2. **Temporal hold** (`hold_ticks`): a decrease must persist for that many
 //!    consecutive ticks before it is committed (tracking the lowest target
-//!    seen in the window). Increases always commit immediately — spinning up
+//!    seen in the window). Increases always commit immediately; spinning up
 //!    is cheap, heat is not.
 
 use crate::curve::CurveDef;
@@ -62,7 +62,7 @@ impl Hysteresis {
 
         if candidate >= last {
             // Equal-or-higher duty commits immediately; an equality after a
-            // blocked decrease means the temperature came back — clear any
+            // blocked decrease means the temperature came back, so clear any
             // pending decrease.
             self.pending = None;
             if candidate > last {

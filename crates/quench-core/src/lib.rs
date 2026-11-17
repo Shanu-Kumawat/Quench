@@ -2,7 +2,7 @@
 //!
 //! Pure thermal-policy logic for Quench: fan curves, hysteresis, thermal
 //! failsafes, performance profiles, configuration, and the hardware [`Backend`]
-//! trait. This crate performs **no I/O** — everything here is deterministic and
+//! trait. This crate performs **no I/O**; everything here is deterministic and
 //! unit-testable. Sysfs/NVML access lives in `quench-backend`, the service
 //! loop in `quench-daemon`.
 //!

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# diagnose-driver.sh — figure out why the ANV15-51 quirk isn't applying.
+# diagnose-driver.sh: figure out why the ANV15-51 quirk isn't applying.
 # Run:  sudo bash scripts/diagnose-driver.sh
 # Safe: only reloads the acer_wmi module (3 times, different modes) and
 # prints state; never writes to any fan/pwm attribute.

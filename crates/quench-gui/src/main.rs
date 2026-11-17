@@ -2,7 +2,7 @@
 //!
 //! Desktop client for the quench daemon, built on GPUI (via gpui-kit).
 //! Two connections to the daemon: one subscribed to events (reader thread),
-//! one for request/response (command thread) — this avoids async plumbing
+//! one for request/response (command thread); this avoids async plumbing
 //! around the blocking IPC client.
 
 use std::cell::RefCell;
@@ -428,7 +428,7 @@ impl QuenchApp {
     }
 
     /// Validate and commit a curve edit: preview locally, push to the
-    /// daemon (which persists it); invalid curves are rejected silently —
+    /// daemon (which persists it); invalid curves are rejected silently,
     /// the editor falls back to the last committed state.
     fn commit_curve(&mut self, fan: &FanId, points: Vec<CurvePoint>) {
         if points.is_empty() || CurveDef::validated(points.clone()).is_err() {
@@ -761,7 +761,7 @@ impl QuenchApp {
                 h_flex()
                     .flex_1()
                     // h_flex centers children vertically by default, which
-                    // collapses the height-less AreaChart to zero — stretch
+                    // collapses the height-less AreaChart to zero; stretch
                     // instead so the plot fills the row.
                     .items_stretch()
                     .gap_2()
@@ -980,7 +980,7 @@ impl QuenchApp {
                     .collect::<Vec<_>>()
             })
             .child(
-                // Sensors: two cards side by side — hottest half on the left
+                // Sensors: two cards side by side, hottest half on the left
                 // so the ranking still reads naturally. 8 rows per card.
                 h_flex()
                     .gap_4()
@@ -1040,7 +1040,7 @@ impl QuenchApp {
             content = content.child(self.render_curve_panel(fan, &curve_points, cx));
         } else {
             // Final color rule: a speed chart turns red while its fan is
-            // spinning above 4000 rpm, white at or below — both fans alike.
+            // spinning above 4000 rpm, white at or below. Both fans alike.
             let (value_color, line_color) = if hw_rpm.is_some_and(|r| r > 4000) {
                 (ACCENT, ACCENT.opacity(0.9))
             } else {
@@ -1443,7 +1443,7 @@ impl QuenchApp {
         let bounds_cell: Rc<RefCell<Option<Bounds<Pixels>>>> = Rc::default();
         let pts: Vec<(f32, f32)> = points.iter().map(|p| (p.0, f32::from(p.1))).collect();
         // The marker shows the fan's ACTUAL state (hardware duty readback),
-        // not the curve's ideal value — it visibly leaves the curve when
+        // not the curve's ideal value; it visibly leaves the curve when
         // the firmware or anything else overrides us.
         let actual_duty = self
             .status
@@ -1904,7 +1904,7 @@ impl QuenchApp {
                     .text_xs()
                     .font_weight(FontWeight::MEDIUM)
                     .text_color(TEXT_MUTED)
-                    .child("Curve points — drag dots on the graph or edit here"),
+                    .child("Curve points: drag dots on the graph or edit here"),
             )
             .child(
                 v_flex()
@@ -2147,7 +2147,7 @@ impl QuenchApp {
                         .text_color(WARN)
                         .text_sm()
                         .child(
-                            "Manual fan control unavailable at the current capability level — \
+                            "Manual fan control unavailable at the current capability level; \
                              run `quench doctor` to see how to enable it (kernel 7.3+ or the \
                              stopgap module).",
                         ),
@@ -2218,7 +2218,7 @@ impl QuenchApp {
                         .text_sm()
                         .child(
                             "No platform profiles exposed by the firmware. Try `sudo modprobe \
-                             acer_wmi predator_v4=1` — see `quench doctor`.",
+                             acer_wmi predator_v4=1`, see `quench doctor`.",
                         ),
                 )
             })
@@ -2485,7 +2485,7 @@ impl QuenchApp {
                         v_flex()
                             .gap_1()
                             .child(div().text_xs().text_color(TEXT_MUTED).child(format!(
-                                "Fan curve \"{name}\" — {:.0}°C/{:.0}% → {:.0}°C/100%",
+                                "Fan curve \"{name}\": {:.0}°C/{:.0}% → {:.0}°C/100%",
                                 c.points.first().map(|p| p.0).unwrap_or(0.0),
                                 c.points.first().map(|p| p.1).unwrap_or(0),
                                 c.points.last().map(|p| p.0).unwrap_or(100.0),
@@ -2494,7 +2494,7 @@ impl QuenchApp {
                     }))
                     .when(curve.is_none(), |this| {
                         this.child(div().text_xs().text_color(TEXT_FAINT).child(format!(
-                            "No fan curve named \"{name}\" in the config — assign curves \
+                            "No fan curve named \"{name}\" in the config, assign curves \
                                  per fan on the Fans page."
                         )))
                     }),
@@ -2514,7 +2514,7 @@ impl QuenchApp {
                             .text_sm()
                             .font_weight(FontWeight::MEDIUM)
                             .text_color(TEXT_MUTED)
-                            .child("Active — this profile is applied")
+                            .child("Active: this profile is applied")
                     })
                     .when(!is_active && manages, |this| {
                         this.flex()
@@ -2743,12 +2743,12 @@ fn profile_meta(name: &str) -> (&'static str, String, String, String) {
             icons::LEAF,
             "Low Power".to_string(),
             "Lowest power draw (Acer Eco mode). Fans stay quiet; best on battery.".to_string(),
-            "Eco — the firmware's power-sipping mode".to_string(),
+            "Eco: the firmware's power-sipping mode".to_string(),
         ),
         "quiet" => (
             icons::MOON,
             "Quiet".to_string(),
-            "Firmware quiet bias — lower fan baseline for light desktop workloads.".to_string(),
+            "Firmware quiet bias: lower fan baseline for light desktop workloads.".to_string(),
             "Quiet (0x00)".to_string(),
         ),
         "balanced" => (
@@ -2760,21 +2760,21 @@ fn profile_meta(name: &str) -> (&'static str, String, String, String) {
         "balanced-performance" => (
             icons::TRENDING_UP,
             "Balanced Performance".to_string(),
-            "Acer's high-performance mode — the strongest profile this BIOS honors.".to_string(),
-            "Performance (0x04) — the real max on this firmware".to_string(),
+            "Acer's high-performance mode: the strongest profile this BIOS honors.".to_string(),
+            "Performance (0x04): the real max on this firmware".to_string(),
         ),
         "performance" => (
             icons::ZAP,
             "Performance".to_string(),
-            "Requests Acer Turbo mode. This BIOS rejects it — the selection silently reverts."
+            "Requests Acer Turbo mode. This BIOS rejects it, so the selection silently reverts."
                 .to_string(),
-            "Turbo (0x05) — refused by this firmware".to_string(),
+            "Turbo (0x05): refused by this firmware".to_string(),
         ),
         "turbo" => (
             icons::ZAP,
             "Turbo".to_string(),
             "Rejected by this firmware; not offered.".to_string(),
-            "Turbo (0x05) — refused by this firmware".to_string(),
+            "Turbo (0x05): refused by this firmware".to_string(),
         ),
         other => (
             icons::SETTINGS,

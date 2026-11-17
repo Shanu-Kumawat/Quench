@@ -2,7 +2,7 @@
 //!
 //! These types are shared by the daemon, the IPC protocol, the CLI and the
 //! GUI, so they carry serde derives and stable field semantics. Nothing here
-//! assumes a particular vendor, fan count, or kernel interface — drivers
+//! assumes a particular vendor, fan count, or kernel interface; drivers
 //! enumerate their fans via [`Backend::fans`] and translate abstract intents
 //! ([`HwFanMode`], duty percent) into whatever their hardware speaks.
 
@@ -72,7 +72,7 @@ pub struct FanDescriptor {
 }
 
 /// Abstract fan-control intent. Drivers translate this into their hardware's
-/// convention — e.g. the acer-wmi `pwmX_enable` mapping is *inverted* relative
+/// convention (e.g. the acer-wmi `pwmX_enable` mapping is *inverted* relative
 /// to the usual hwmon convention (`0` = turbo, `1` = custom, `2` = auto); that
 /// translation lives in the acer driver, not here.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]

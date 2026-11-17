@@ -4,7 +4,7 @@
 //! so NVML supplements the GPU hwmon sensor with name + power draw.
 //! NVML calls can block for ~1 s and burn real CPU during driver
 //! memory-pressure windows (NVRM errors observed periodically on some
-//! driver builds) — running them on the control thread stalled fan control
+//! driver builds): running them on the control thread stalled fan control
 //! and aligned with audio-buffer deadlines. All NVML work therefore lives
 //! on a dedicated background thread at a relaxed cadence; `read()` serves
 //! the latest value instantly and never blocks.

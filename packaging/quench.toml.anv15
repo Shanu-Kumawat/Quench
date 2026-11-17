@@ -45,7 +45,7 @@ mode = "auto"       # "auto" | "manual" | "curve"
 mode = "auto"
 
 [platform]
-# Profile Quench keeps applied (one of the firmware's choices — see
+# Profile Quench keeps applied (one of the firmware's choices, see
 # `quench profile list`), or "none" to never touch platform profiles.
 #
 # Use "none" when power-profiles-daemon (or another tool) manages profiles:

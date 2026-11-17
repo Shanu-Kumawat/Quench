@@ -1,4 +1,4 @@
-//! Daemon entry point: wiring only — all logic lives in the library.
+//! Daemon entry point: wiring only, all logic lives in the library.
 
 use std::path::PathBuf;
 use std::sync::atomic::{AtomicBool, Ordering};

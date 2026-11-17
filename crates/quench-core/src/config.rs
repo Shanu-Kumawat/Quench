@@ -120,7 +120,7 @@ impl Default for FanConfig {
 pub struct PlatformConfig {
     /// Profile the daemon keeps applied. `None` (written as
     /// `active = "none"`, or by omitting the key) means Quench never
-    /// touches platform profiles — for machines where power-profiles-daemon
+    /// touches platform profiles, for machines where power-profiles-daemon
     /// or another tool owns them.
     #[serde(
         default,

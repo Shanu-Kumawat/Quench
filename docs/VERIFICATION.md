@@ -1,8 +1,8 @@
-# M0 hardware verification procedure
+# Hardware verification procedure (ANV15-51)
 
 These experiments validate the architecture's hardware assumptions on the
 ANV15-51 before/while relying on them. They need root and change system state
-temporarily — each step restores the previous state. Run `quench doctor`
+temporarily, and each step restores the previous state. Run `quench doctor`
 afterwards to confirm.
 
 ## 1. Baseline
@@ -27,7 +27,7 @@ quench doctor
 **Expected:** capability `monitor-profiles`:
 - `/sys/class/hwmon/hwmonX/name` = `acer_wmi` with `fan1_input`/`fan2_input`
   (CPU/GPU RPM) and `temp1-3_input`, but **no `pwm1_enable`** (the param sets
-  only the `predator_v4` quirk — verified in mainline `acer-wmi.c`).
+  only the `predator_v4` quirk, verified in mainline `acer-wmi.c`).
 - `/sys/firmware/acpi/platform_profile_choices` appears (low-power, quiet,
   balanced, balanced-performance on BIOS V1.60; community reports on
   ANV15-51).
@@ -56,17 +56,17 @@ sleep 2
 quench doctor          # expect: capability full (pwm1_enable present)
 ```
 
-**Cautious functional check** (these write to hardware — respect the order,
+**Cautious functional check** (these write to hardware; respect the order,
 return to auto at the end):
 
 ```sh
 H=/sys/class/hwmon/hwmon*   # the acer_wmi one
 echo 1 | sudo tee $H/pwm1_enable   # custom mode, CPU fan
-echo 128 | sudo tee $H/pwm1        # ~50% duty — listen/verify RPM change
+echo 128 | sudo tee $H/pwm1        # ~50% duty, listen/verify RPM change
 cat $H/fan1_input
 echo 255 | sudo tee $H/pwm1        # 100%
 cat $H/fan1_input                  # expect near-max RPM (~7000 class)
-echo 2 | sudo tee $H/pwm1_enable   # BACK TO AUTO — always end here
+echo 2 | sudo tee $H/pwm1_enable   # BACK TO AUTO, always end here
 ```
 
 **Record:**
@@ -97,9 +97,9 @@ journalctl -u quench -b --since "10 min ago"   # grace re-apply messages
 
 | Assumption | Status | Source |
 |---|---|---|
-| EC writes useless for fan control on ANV15-51 | community evidence; Quench never writes EC | docs/INVESTIGATION.md |
+| EC writes useless for fan control on ANV15-51 | community evidence; Quench never writes EC | docs/HARDWARE.md |
 | `predator_v4=1` → hwmon + profiles, no pwm | **verified on this machine** (diagnose-driver.sh §3) | HARDWARE.md |
-| ANV15-51 quirk = full control incl. independent dual fans | **verified on this machine** (BIOS V1.60): fan1/fan2 RPM + pwm1/2 + temp1-3 + 5 profiles | INVESTIGATION.md |
+| ANV15-51 quirk = full control incl. independent dual fans | **verified on this machine** (BIOS V1.60): fan1/fan2 RPM + pwm1/2 + temp1-3 + 5 profiles | docs/HARDWARE.md |
 | turbo profile absent | **verified**: choices list has no turbo | this run |
 | hwmon registers as `acer`, not `acer_wmi` | **verified** (fixed in Quench's probe) | this run |
 | first driver swap after dkms install can silently no-op | **observed once**; setup script now retries the swap | this run |

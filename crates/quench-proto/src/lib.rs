@@ -7,7 +7,7 @@
 //! [`Frame`]. Requests carry a caller-chosen `id`; responses match it; events
 //! arrive unsolicited on connections that sent [`Request::Subscribe`].
 //!
-//! The protocol is versioned via the [`Request::Hello`] handshake — clients
+//! The protocol is versioned via the [`Request::Hello`] handshake; clients
 //! refuse mismatched servers rather than guessing at semantics.
 
 #![cfg_attr(test, allow(clippy::unwrap_used, clippy::expect_used))]
@@ -336,7 +336,7 @@ fn read_exact_or_closed<R: Read>(r: &mut R, buf: &mut [u8]) -> Result<(), IpcErr
 }
 
 /// Blocking IPC client. Single-threaded by design: responses are matched by
-/// id while events are buffered for later retrieval — see [`Client::call`]
+/// id while events are buffered for later retrieval, see [`Client::call`]
 /// and [`Client::read_event`].
 #[derive(Debug)]
 pub struct Client {

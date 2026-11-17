@@ -1,8 +1,8 @@
 **What it changes:**
 
-**Tested-on:** (hardware model, or "no hardware needed — fixture tests")
+**Tested-on:** (hardware model, or "no hardware needed, fixture tests")
 
-**Safety-relevant?** (touches fan write path / failsafes / suspend behavior —
+**Safety-relevant?** (touches fan write path / failsafes / suspend behavior,
 if yes, name the test that pins the new behavior)
 
 For new drivers: probe output and `quench doctor` output attached, and the

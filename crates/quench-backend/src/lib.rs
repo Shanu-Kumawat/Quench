@@ -4,13 +4,13 @@
 //! policy lives in `quench-core`.
 //!
 //! ## Layout
-//! - [`drivers`] — vendor device drivers (acer-wmi today) behind a
+//! - [`drivers`]: vendor device drivers (acer-wmi today) behind a
 //!   registry that picks the first matching driver
-//! - [`capability`] — probing what the acer-wmi driver offers
-//! - [`hwmon`] — generic hwmon sensor scanning
-//! - [`power`] — AC/battery state
-//! - [`nvml`] — NVIDIA GPU telemetry
-//! - [`fake`] — in-memory backend for tests
+//! - [`capability`]: probing what the acer-wmi driver offers
+//! - [`hwmon`]: generic hwmon sensor scanning
+//! - [`power`]: AC/battery state
+//! - [`nvml`]: NVIDIA GPU telemetry
+//! - [`fake`]: in-memory backend for tests
 
 #![cfg_attr(test, allow(clippy::unwrap_used, clippy::expect_used))]
 
@@ -37,7 +37,7 @@ use quench_core::{
 /// per-core temps) is trusted. NVMe reads cost ~5-7 ms each and per-core
 /// temps ~2 ms; none of them feed fan control (the driver reports fresh
 /// CPU/GPU-class temps every tick), so they refresh slowly. These are
-/// ordinary kernel sysfs reads — no WMI/EC round-trip — so the cadence is
+/// ordinary kernel sysfs reads (no WMI/EC round-trip), so the cadence is
 /// a display-freshness choice, not a latency one.
 pub const SCAN_TTL: Duration = Duration::from_secs(5);
 

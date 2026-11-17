@@ -4,7 +4,7 @@
 //! implement [`quench_core::Backend`] (fan enumeration, telemetry, control)
 //! plus [`Driver`] for discovery. Nothing requires a particular kernel
 //! interface: a driver may sit on hwmon sysfs (acer-wmi, asus), WMI, or
-//! anything else — it only has to answer the `Backend` contract and be honest
+//! anything else; it only has to answer the `Backend` contract and be honest
 //! about what it cannot do via [`quench_core::BackendError::Unsupported`].
 //!
 //! Adding a driver:
@@ -24,7 +24,7 @@ pub trait Driver: Backend + Sized {
     const NAME: &'static str;
 
     /// Try to bind under `root` (real root `/`, or a test fixture root).
-    /// Return `None` when this driver doesn't match the machine — the
+    /// Return `None` when this driver doesn't match the machine; the
     /// registry then tries the next one.
     fn probe_driver(root: &Path) -> Option<Self>;
 }

@@ -40,7 +40,7 @@ Normal ──warn──▶ ForceFull ──crit──▶ ReleasedAuto
 | Failure | Behavior |
 |---|---|
 | Daemon killed (SIGKILL) | Re-assert stops; firmware auto resumes (periodic `SetGamingFanBehavior` lapses). Fans never stay pinned by dead software. |
-| Daemon stopped (SIGTERM/systemctl stop) | `restore_auto()` writes auto on every fan before exit (also covered by `ExecStopPost` semantics — the daemon handles it in-process). |
+| Daemon stopped (SIGTERM/systemctl stop) | `restore_auto()` writes auto on every fan before exit (the daemon also handles this in-process, with `ExecStopPost` semantics as a backstop). |
 | Firmware reverts manual settings (observed ~10 s reverts on sibling models, DAMX #136) | Mode+duty re-asserted at least every `reassert_interval_ms` (2 s default); readback drift triggers an immediate rewrite + `external-override` alert. |
 | Another tool (CoolerControl…) fights us | Same drift detection alerts; our writes continue. Single-writer is encouraged but not assumed. |
 | Suspend/resume | logind `PrepareForSleep(true)` → fans to auto before sleep. On resume: **20 s grace with zero writes** (the EC needs 12–15 s to reinitialize; eager writes cause the profile-bouncing bugs seen in DAMX #253), then state re-applied from scratch. |
@@ -51,7 +51,7 @@ Normal ──warn──▶ ForceFull ──crit──▶ ReleasedAuto
 ## Watchdog & packaging
 
 `quench.service` is `Type=notify` with `WatchdogSec=30`; the daemon pings
-`WATCHDOG=1` every tick. If the loop hangs, systemd restarts it — and a
+`WATCHDOG=1` every tick. If the loop hangs, systemd restarts it, and a
 restart begins by restoring auto before taking control again.
 `OOMScoreAdjust=-1000` keeps the OOM killer away from the failsafe path.
 

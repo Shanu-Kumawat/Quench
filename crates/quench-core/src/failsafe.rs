@@ -3,9 +3,9 @@
 //! A small, explicitly tested state machine that sits *above* curve
 //! evaluation:
 //!
-//! - `Normal` — curves/hysteresis drive duty, with conservative floors.
-//! - `ForceFull` — a warn threshold was crossed: command 100% duty.
-//! - `ReleasedAuto` — a crit threshold was crossed: **give control back to
+//! - `Normal`: curves/hysteresis drive duty, with conservative floors.
+//! - `ForceFull`: a warn threshold was crossed, command 100% duty.
+//! - `ReleasedAuto`: a crit threshold was crossed, **give control back to
 //!   the firmware** (`pwmX_enable = 2`). The EC's own controller is the most
 //!   reliable cooling authority we have; the daemon latches in this phase
 //!   until temperatures have recovered by `recovery_c`.

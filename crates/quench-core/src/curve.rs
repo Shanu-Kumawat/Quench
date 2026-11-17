@@ -105,7 +105,7 @@ impl CurveDef {
 
     /// Duty (percent) at `temp_c`, piecewise-linear with clamping at both
     /// ends. Assumes the curve was validated (monotonic temps); invalid
-    /// curves still return *something* rather than panicking — the first
+    /// curves still return *something* rather than panicking; the first
     /// point at or above `temp_c` bounds the result.
     pub fn duty_at(&self, temp_c: f32) -> u8 {
         let Some(first) = self.points.first() else {

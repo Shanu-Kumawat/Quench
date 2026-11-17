@@ -21,7 +21,7 @@ pub enum SuspendEvent {
 
 /// Spawn the watcher thread. Fails softly: without a system bus (containers,
 /// minimal test environments) the daemon still runs, just without suspend
-/// awareness — logged once.
+/// awareness (logged once).
 pub fn spawn_watcher(tx: Sender<SuspendEvent>) -> std::thread::JoinHandle<()> {
     std::thread::Builder::new()
         .name("suspend-watch".into())

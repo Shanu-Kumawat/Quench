@@ -4,25 +4,25 @@
 
 ```
 ┌─────────────┐   ┌────────────┐   ┌──────────────┐
-│ quench    │   │ quench   │   │ quench-gui │
+│ quench      │   │ quench     │   │ quench-gui   │
 │ (CLI, user) │   │ doctor     │   │ (GPUI, user) │
 └──────┬──────┘   └─────┬──────┘   └──────┬───────┘
        │  UDS /run/quench/quench.sock │        (probe sysfs directly,
        └───────────────┬──────────────────┘         no daemon needed)
-                 ┌─────┴──────────────────────────┐
-                 │ quench-daemon (root, systemd)│
-                 │  ┌──────────┐  ┌────────────┐  │
-                 │  │ control  │─▶│ quench-  │  │
-                 │  │ loop     │  │ backend    │──┼──▶ /sys (acer-wmi
-                 │  │ (1s tick)│  │            │  │    hwmon, profiles),
-                 │  └──────────┘  └────────────┘  │    NVML
-                 │  ┌──────────┐  ┌────────────┐  │
-                 │  │ IPC      │  │ suspend    │  │──▶ logind (D-Bus,
-                 │  │ server   │  │ watcher    │  │    PrepareForSleep)
-                 │  └──────────┘  └────────────┘  │
-                 │  signals: SIGTERM stop, SIGHUP │
-                 │  reload; sd_notify watchdog    │
-                 └────────────────────────────────┘
+                 ┌─────┴───────────────────────────┐
+                 │ quench-daemon (root, systemd)   │
+                 │  ┌──────────┐  ┌────────────┐   │
+                 │  │ control  │─▶│ backend    │───┼──▶ /sys (acer-wmi
+                 │  │ loop     │  │            │   │    hwmon, profiles),
+                 │  │ (1s tick)│  │            │   │    NVML
+                 │  └──────────┘  └────────────┘   │
+                 │  ┌──────────┐  ┌────────────┐   │
+                 │  │ IPC      │  │ suspend    │───┼──▶ logind (D-Bus,
+                 │  │ server   │  │ watcher    │   │    PrepareForSleep)
+                 │  └──────────┘  └────────────┘   │
+                 │  signals: SIGTERM stop, SIGHUP  │
+                 │  reload; sd_notify watchdog     │
+                 └─────────────────────────────────┘
 ```
 
 - The **daemon owns all hardware access**; clients never touch sysfs for
@@ -34,7 +34,7 @@
   a scripted fake.
 - Threads: main (control loop), IPC accept, one reader + one writer thread
   per connection (single-writer ordering), logind watcher, signal handler.
-  No async runtime — the problem is a 1 Hz loop, and std threads keep the
+  No async runtime: the problem is a 1 Hz loop, and std threads keep the
   daemon's failure surface small.
 
 ## IPC protocol (quench-proto)
@@ -50,27 +50,27 @@ Length-prefixed (`u32` LE) JSON frames over the socket:
 
 ## State model
 
-- `/etc/quench/quench.toml` — policy: curves, thresholds, intervals,
+- `/etc/quench/quench.toml`: policy (curves, thresholds, intervals,
   *default* fan modes, desired platform profile. Strict TOML
   (`deny_unknown_fields`), validated on load; GUI curve edits are persisted
   here by the daemon (atomic tmp+rename).
-- `/var/lib/quench/state.json` — mutable selections: current per-fan modes
+- `/var/lib/quench/state.json`: mutable selections (current per-fan modes
   and profile. Overlays config defaults on startup so a restart restores
   user intent.
-- In-memory `SharedState` — everything both the IPC server and control loop
+- In-memory `SharedState`: everything both the IPC server and control loop
   need, behind one mutex, updated once per tick.
 
 ## Backend layer (quench-backend)
 
 `QuenchBackend` composes:
 
-1. `AcerWmiBackend` — fans/pwm/profiles via the mainline driver's hwmon
+1. `AcerWmiBackend`: fans/pwm/profiles via the mainline driver's hwmon
    (`fan1/2`, `pwm1/2[_enable]`, `temp1-3`) and `platform_profile`.
    Capability-probed: `Full | MonitorProfiles | None`, degrading gracefully.
-2. generic hwmon scan — coretemp/nvme/acpitz/iwlwifi/... temperatures with
+2. generic hwmon scan: coretemp/nvme/acpitz/iwlwifi/... temperatures with
    classification (the `cpu_temp`/`gpu_temp` used for control are the max
    over CPU/GPU-class sensors).
-3. NVML (feature `nvml`) — GPU temp/power.
+3. NVML (feature `nvml`): GPU temp/power.
 
 All sysfs paths are built from a `root` prefix, so the entire backend is
 tested against tempdir fixtures that mirror real sysfs layouts.
@@ -91,7 +91,7 @@ explains how to get more (kernel 7.3+ / stopgap module / `predator_v4=1`).
 - `quench-backend`: tempdir sysfs fixtures for probing, telemetry parsing,
   write encoding (pct↔pwm), permission/capability error mapping.
 - `quench-daemon`: the production control loop against a `ScriptedBackend`
-  (fake + settable temps), asserting on the recorded write log —
+  (fake + settable temps), asserting on the recorded write log:
   re-assert timing, failsafe escalation/latch/recovery, suspend auto +
   20 s grace, override detection with cooldown, graceful-shutdown restore;
   plus a real-socket end-to-end test of the IPC server (auth path exercised
