@@ -1,6 +1,12 @@
 # Quench
 
 <p align="center">
+  <img src="docs/img/logo.png" alt="Quench — the fire-quenching salamander" width="220">
+</p>
+
+<p align="center"><em>Legend says the salamander lives in fire unharmed.</em></p>
+
+<p align="center">
   <img src="docs/img/dashboard.png" alt="Quench dashboard" width="880">
 </p>
 
@@ -76,7 +82,7 @@ crates/
 ### From source
 
 ```sh
-git clone https://github.com/Shanu-Kumawat/Quench.git
+git clone https://github.com/Shanu-Kumawat/quench.git
 cd Quench
 cargo build --release -p quench-daemon -p quench-cli -p quench-gui
 sudo bash scripts/quench-setup.sh   # service + group + config; idempotent
