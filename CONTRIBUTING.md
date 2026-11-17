@@ -53,3 +53,18 @@ Notes:
 By contributing you agree your contributions are licensed MIT (matching the
 project), except contributions to `driver/acer-wmi-anv15/`, which are
 GPL-2.0-only (upstream kernel code).
+
+## Local checks (pre-push hook)
+
+CI runs `cargo fmt --check`, clippy (`-D warnings`) and the test suite on every
+push. The same gate runs locally before a push lands, via a git hook:
+
+```bash
+git config core.hooksPath .githooks   # once per clone
+```
+
+The logic lives in `scripts/check.sh` (also runnable directly:
+`bash scripts/check.sh`). It pins the matched system toolchain — on Arch, do
+**not** let the rustup toolchain (newer rustc) touch `target/`; it poisons the
+build cache and everything fails with `E0514`. Escape hatch:
+`git push --no-verify` (CI is still the final authority).
