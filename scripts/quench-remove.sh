@@ -56,7 +56,7 @@ rm -f /usr/lib/systemd/system/quench.service
 rm -f /usr/lib/sysusers.d/quench.conf
 rm -f /usr/lib/tmpfiles.d/quench.conf
 rm -f /usr/share/applications/quench-gui.desktop
-rm -f /usr/share/icons/hicolor/512x512/apps/quench.png
+rm -f /usr/share/icons/hicolor/scalable/apps/quench.svg
 systemctl daemon-reload
 info "removed binaries and service (config kept at /etc/quench if present)"
 

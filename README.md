@@ -1,13 +1,12 @@
-# Quench
+<h1 align="center">Quench</h1>
 
 <p align="center">
-  <img src="docs/img/logo.png" alt="Quench mascot: the fire-quenching salamander" width="200">
+  <img src="packaging/quench.svg" alt="Quench mascot: the fire-quenching salamander" width="200">
 </p>
 
 <p align="center">
   <strong>Thermal and fan management for Linux laptops.</strong><br>
-  Custom fan curves, layered thermal failsafes, performance profiles, live
-  monitoring, and a GPUI desktop GUI + CLI.<br>
+  Custom fan curves, layered failsafes, performance profiles.<br>
   <em>Legend says the salamander lives in fire unharmed.</em>
 </p>
 
