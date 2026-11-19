@@ -42,7 +42,7 @@ pub enum Request {
     Hello {
         /// Protocol version the client speaks.
         protocol_version: u32,
-        /// Human-readable client identification (`quench-cli 0.1.0`).
+        /// Human-readable client identification (`quench-cli 0.2.0`).
         client: String,
     },
     /// Ask the server to push [`Event::Tick`] frames to this connection.

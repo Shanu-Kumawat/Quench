@@ -6,7 +6,8 @@
 
 <p align="center">
   <strong>Thermal and fan management for Linux laptops.</strong><br>
-  Custom fan curves, layered failsafes, performance profiles.<br>
+  Custom fan curves, layered thermal failsafes, performance profiles, live<br>
+  monitoring.<br>
   <em>Legend says the salamander lives in fire unharmed.</em>
 </p>
 
@@ -84,6 +85,24 @@ crates/
 - **No EC writes, ever.** Full reasoning in [`docs/HARDWARE.md`](docs/HARDWARE.md).
 
 ## Install
+
+### Prebuilt release (x86_64 Linux)
+
+Grab `quench-v0.2.0-x86_64-linux.tar.gz` from the
+[releases page](https://github.com/Shanu-Kumawat/quench/releases), unpack it,
+then as root:
+
+```sh
+install -m755 quench-0.2.0/quench-daemon quench-0.2.0/quench quench-0.2.0/quench-gui -t /usr/bin/
+install -Dm644 quench-0.2.0/quench.service -t /usr/lib/systemd/system/
+install -Dm644 quench-0.2.0/sysusers.conf /usr/lib/sysusers.d/quench.conf
+install -Dm644 quench-0.2.0/tmpfiles.conf /usr/lib/tmpfiles.d/quench.conf
+groupadd quench 2>/dev/null; usermod -aG quench "$USER"   # relogin needed
+systemctl daemon-reload && systemctl enable --now quench
+```
+
+Then set your config (`/etc/quench/quench.toml`, see [Quick start](#quick-start))
+and run `quench doctor`.
 
 ### From source
 

@@ -4986,7 +4986,7 @@ dependencies = [
 
 [[package]]
 name = "quench-backend"
-version = "0.1.0"
+version = "0.2.0"
 dependencies = [
  "nvml-wrapper",
  "quench-core",
@@ -4997,7 +4997,7 @@ dependencies = [
 
 [[package]]
 name = "quench-cli"
-version = "0.1.0"
+version = "0.2.0"
 dependencies = [
  "anyhow",
  "clap",
@@ -5010,7 +5010,7 @@ dependencies = [
 
 [[package]]
 name = "quench-core"
-version = "0.1.0"
+version = "0.2.0"
 dependencies = [
  "serde",
  "serde_json",
@@ -5020,7 +5020,7 @@ dependencies = [
 
 [[package]]
 name = "quench-daemon"
-version = "0.1.0"
+version = "0.2.0"
 dependencies = [
  "anyhow",
  "clap",
@@ -5041,7 +5041,7 @@ dependencies = [
 
 [[package]]
 name = "quench-gui"
-version = "0.1.0"
+version = "0.2.0"
 dependencies = [
  "anyhow",
  "gpui-kit",
@@ -5051,7 +5051,7 @@ dependencies = [
 
 [[package]]
 name = "quench-proto"
-version = "0.1.0"
+version = "0.2.0"
 dependencies = [
  "quench-core",
  "serde",

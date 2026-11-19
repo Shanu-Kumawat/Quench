@@ -124,6 +124,7 @@ install -Dm644 "$REPO_ROOT/packaging/tmpfiles.conf"    /usr/lib/tmpfiles.d/quenc
 # Desktop launcher (app grid / wofi / rofi entry for the GUI)
 install -Dm644 "$REPO_ROOT/packaging/quench-gui.desktop" /usr/share/applications/quench-gui.desktop
 install -Dm644 "$REPO_ROOT/packaging/quench.svg" /usr/share/icons/hicolor/scalable/apps/quench.svg
+install -Dm644 "$REPO_ROOT/docs/SAFETY.md" /usr/share/doc/quench/SAFETY.md
 systemd-sysusers /usr/lib/sysusers.d/quench.conf
 systemd-tmpfiles --create /usr/lib/tmpfiles.d/quench.conf
 info "binaries, service, users and runtime dirs installed"
