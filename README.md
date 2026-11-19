@@ -6,8 +6,7 @@
 
 <p align="center">
   <strong>Thermal and fan management for Linux laptops.</strong><br>
-  Custom fan curves, layered thermal failsafes, performance profiles, live<br>
-  monitoring.<br>
+  Custom fan curves, layered thermal failsafes, performance profiles, live monitoring.<br>
   <em>Legend says the salamander lives in fire unharmed.</em>
 </p>
 
